@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MWStats {
@@ -13,6 +15,7 @@ public class MWStats {
 	protected final String diff = "http://minewriter.net/diff.php";
 	public volatile List<Book> library = new ArrayList<Book>();
 	public static int update;
+	private final static SimpleDateFormat sdf = new SimpleDateFormat("h:m:s");
 
 	public static void main(String[] args) {
 		MWStats mw = new MWStats();
@@ -24,7 +27,8 @@ public class MWStats {
 	}
 
 	public static void log(String log) {
-		System.out.println(log);
+		String date = sdf.format(new Date());
+		System.out.println(date + " [INFO] " + log);
 	}
 }
 
