@@ -23,6 +23,9 @@ public class UpdateThread extends Thread {
 		this.i = i;
 	}
 
+	/**
+	 * The SmartDiff code
+	 */
 	@Override
 	public void run() {
 		int c = diff + 1;
