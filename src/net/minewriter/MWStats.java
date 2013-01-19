@@ -121,7 +121,7 @@ class DiffThread extends Thread {
 			new UpdateThread(mw, total, mw.library.size()).start();
 		}
 		try {
-			Thread.sleep(9990 * 60 * MWStats.update);
+			Thread.sleep(1000 * 60 * MWStats.update);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
