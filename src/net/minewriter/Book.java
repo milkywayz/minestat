@@ -8,6 +8,7 @@ public class Book {
 	private JSONObject obj;
 	private boolean inv;
 	private String content;
+	private String license;
 
 	public Book(JSONObject obj) {
 		this.obj = obj;
@@ -15,6 +16,7 @@ public class Book {
 		String cont = null;
 		try {
 			cont = obj.getString("Content");
+			license = obj.getString("License");
 		} catch(Exception ex) {			
 		} finally {
 			content = cont;
@@ -27,6 +29,10 @@ public class Book {
 
 	public String getContent() {
 		return content;
+	}
+	
+	public String getLicense() {
+		return license;
 	}
 	
 	public String getTitle() throws JSONException {
