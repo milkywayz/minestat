@@ -15,15 +15,21 @@ public class MWStats {
 	protected final String diff = "http://minewriter.net/diff.php";
 	public volatile List<Book> library = new ArrayList<Book>();
 	public static int update;
-	private final static SimpleDateFormat sdf = new SimpleDateFormat("h:m:s");
+	private final static SimpleDateFormat sdf = new SimpleDateFormat("H:m:s");
 
 	public static void main(String[] args) {
-		MWStats mw = new MWStats();
+		MWStats mw = new MWStats();		
 		log("Starting new stats generator");
-		int i = Integer.parseInt(args[0]);
+		int i;
+		try {
+			 i = Integer.parseInt(args[0]);
+		} catch(Exception ex) {
+			i = 10;
+		}
 		update = i;
-		log("Will post stats every " + i + " minutes");
+		log("Will calculate stats every " + i + " minutes");
 		new DiffThread(mw).start();
+		new ConsoleThread().start();
 	}
 
 	public static void log(String log) {
@@ -31,7 +37,43 @@ public class MWStats {
 		System.out.println(date + " [INFO] " + log);
 	}
 }
+class ConsoleThread extends Thread {
+	
+	public ConsoleThread() {
+		
+	}
+	
+	@Override
+	public void run() {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String cmd = null;
+		try {
+			while(true) {
+				cmd = br.readLine();
+				if(cmd == null) {
+					continue;
+				}
+				processCommand(cmd);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
+	private void processCommand(String cmd) {
+		switch(cmd) {
+		case "help":
+			MWStats.log("Commands: help, exit");
+			break;
+		case "exit":
+			System.exit(0);
+			break;
+		default:
+			MWStats.log("Command '" + cmd + "' is not recognized, type 'help'");
+			break;
+		}
+	}
+}
 class DiffThread extends Thread {
 
 	final MWStats mw;
@@ -67,6 +109,7 @@ class DiffThread extends Thread {
 			total = Integer.parseInt(diff);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			total = 0;
 		}
 		int dif = total - i;
 		if (dif < 0) {
@@ -78,7 +121,7 @@ class DiffThread extends Thread {
 			new UpdateThread(mw, total, mw.library.size()).start();
 		}
 		try {
-			Thread.sleep(1000 * 60 * MWStats.update);
+			Thread.sleep(9990 * 60 * MWStats.update);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
