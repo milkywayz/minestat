@@ -34,6 +34,7 @@ public class StatThread extends Thread {
 			count();
 			favoriteWord();
 			getLongestBook();
+			favoriteLicense();
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -85,6 +86,32 @@ public class StatThread extends Thread {
 			}
 		}
 		Stat s = new Stat("LongestBook", maxEntry.getKey());
+		Stat st = new Stat("LongestBookLength", maxEntry.getValue());
+		stats.add(s);
+		stats.add(st);
+		return maxEntry.getKey();
+	}
+	
+	public String favoriteLicense() throws JSONException {
+		Map<String, Integer> books = new HashMap<String, Integer>();
+		for (Book b : localLibrary) {
+			String license = b.getLicense();
+			if(books.containsKey(license)) {
+				int c = books.get(license);
+				books.remove(license);
+				books.put(license, c++);
+				continue;
+			}
+			books.put(b.getLicense(), 0);
+		}
+		Entry<String, Integer> maxEntry = null;
+
+		for (Entry<String, Integer> entry : books.entrySet()) {
+			if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
+				maxEntry = entry;
+			}
+		}
+		Stat s = new Stat("FavLicense", maxEntry.getKey());
 		stats.add(s);
 		return maxEntry.getKey();
 	}
