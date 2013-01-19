@@ -19,6 +19,7 @@ public class Upload extends Thread {
 	 * @param jso
 	 * @throws Exception
 	 */
+	@SuppressWarnings("deprecation")
 	public static void postJSON(JSONObject jso) throws Exception{
 		HttpClient httpclient= new DefaultHttpClient();
 	    HttpPost httppost= new HttpPost("http://minewriter.net/stat.php");
