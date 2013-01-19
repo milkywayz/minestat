@@ -48,7 +48,7 @@ public class StatThread extends Thread {
 	public int doCharacterCount() throws JSONException {
 		int chars = 0;
 		for (Book b : localLibrary) {
-			int chart = b.getJSON().getString("Content").length();
+			int chart = b.getContent().length();
 			chars = chars + chart;
 		}
 		Stat s = new Stat("Chars", chars);
@@ -70,10 +70,11 @@ public class StatThread extends Thread {
 		return a;
 	}
 
+	@SuppressWarnings("null")
 	public String getLongestBook() throws JSONException {
 		Map<String, Integer> books = new HashMap<String, Integer>();
 		for (Book b : localLibrary) {
-			int chart = b.getJSON().getString("Content").length();
+			int chart = b.getContent().length();
 			books.put(b.getTitle(), chart);
 		}
 		Entry<String, Integer> maxEntry = null;
@@ -91,7 +92,7 @@ public class StatThread extends Thread {
 	public String favoriteWord() throws JSONException {
 		String giant = "";
 		for (Book b : localLibrary) {
-			giant = giant + b.getJSON().getString("Content");
+			giant = giant + b.getContent();
 		}
 		String[] words = giant.split(" ");
 		List<String> list = Arrays.asList(words);
@@ -111,6 +112,7 @@ public class StatThread extends Thread {
 		stats.add(st);
 		return mfw;
 	}
+	
 
 	public void writeJson(List<Stat> sts) throws Exception {
 		String json = "{";
