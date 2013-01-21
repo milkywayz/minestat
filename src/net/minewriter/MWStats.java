@@ -15,15 +15,15 @@ public class MWStats {
 	protected final String diff = "http://minewriter.net/diff.php";
 	public volatile List<Book> library = new ArrayList<Book>();
 	public static int update;
-	private final static SimpleDateFormat sdf = new SimpleDateFormat("H:m:s");
+	public final static SimpleDateFormat sdf = new SimpleDateFormat("H:m:ss");
 
 	public static void main(String[] args) {
-		MWStats mw = new MWStats();		
+		MWStats mw = new MWStats();
 		log("Starting new stats generator");
 		int i;
 		try {
-			 i = Integer.parseInt(args[0]);
-		} catch(Exception ex) {
+			i = Integer.parseInt(args[0]);
+		} catch (Exception ex) {
 			i = 10;
 		}
 		update = i;
@@ -37,20 +37,17 @@ public class MWStats {
 		System.out.println(date + " [INFO] " + log);
 	}
 }
+
 class ConsoleThread extends Thread {
-	
-	public ConsoleThread() {
-		
-	}
-	
+
 	@Override
 	public void run() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String cmd = null;
 		try {
-			while(true) {
+			while (true) {
 				cmd = br.readLine();
-				if(cmd == null) {
+				if (cmd == null) {
 					continue;
 				}
 				processCommand(cmd);
@@ -61,7 +58,7 @@ class ConsoleThread extends Thread {
 	}
 
 	private void processCommand(String cmd) {
-		switch(cmd) {
+		switch (cmd) {
 		case "help":
 			MWStats.log("Commands: help, exit");
 			break;
@@ -74,6 +71,7 @@ class ConsoleThread extends Thread {
 		}
 	}
 }
+
 class DiffThread extends Thread {
 
 	final MWStats mw;
@@ -115,9 +113,9 @@ class DiffThread extends Thread {
 		if (dif < 0) {
 			MWStats.log("Caught invalid difference, less than 0! -> " + dif);
 		} else if (dif == 0) {
-			MWStats.log("Stats are up to date");
+			MWStats.log("Stats appear to be up to date");
 		} else {
-			MWStats.log("Processing " + dif + " books into our local database");
+			System.out.print("Processing " + dif + " books into our cache");
 			new UpdateThread(mw, total, mw.library.size()).start();
 		}
 		try {
