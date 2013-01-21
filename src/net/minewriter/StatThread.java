@@ -147,7 +147,7 @@ public class StatThread extends Thread {
 			json = json + "\"" + t.getTitle() + "\":" + "\"" + t.getValue() + "\",";
 		}
 		String j = json.substring(0, json.length()-1);
-		j = j + "}";
+		j = j + "}".replace("\\s", "");
 		MWStats.log(j);
 		sendJSON(new JSONObject(j));
 	}
