@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ public class UpdateThread extends Thread {
 	private int total;
 	private int diff;
 	private MWStats mw;
+	private int p = -1;
 
 	UpdateThread(MWStats mw, int t, int i) {
 		this.mw = mw;
@@ -37,29 +39,38 @@ public class UpdateThread extends Thread {
 
 	public void fetch(int i) {
 		int percent = (int) ((i * 100F) / total);
-		if (percent % 5 == 0) {
-			MWStats.log("Fetching at " + percent + "%");
-		}
 		BufferedReader reader = null;
+		URL url;
+		HttpURLConnection hCon;
+		InputStream str;
+		StringBuilder buffer = new StringBuilder();
 		try {
-			URL url = new URL("http://minewriter.net/query.php?id=" + i
-					+ "&type=JSON&mode=lookup");
-			HttpURLConnection hCon = (HttpURLConnection) url
-					.openConnection();
-			InputStream str = hCon.getInputStream();
+			url = new URL("http://minewriter.net/lookup.php?id=" + i);
+			hCon = (HttpURLConnection) url.openConnection();
+			str = hCon.getInputStream();
 			reader = new BufferedReader(new InputStreamReader(str));
-			StringBuilder buffer = new StringBuilder();
 			int read;
 			char[] chars = new char[2048];
 			while ((read = reader.read(chars)) != -1) {
 				buffer.append(chars, 0, read);
 			}
 			reader.close();
-			mw.library.add(new Book(new JSONObject(buffer.toString())));			
+			mw.library.add(new Book(new JSONObject(buffer.toString())));
 		} catch (JSONException e) {
 			mw.library.add(new Book());
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
+		if (percent % 5 == 0) {
+			if (p != percent) {
+				p = percent;
+				System.out.println();
+				MWStats.log("Fetching at " + percent + "%");
+				String date = MWStats.sdf.format(new Date());
+				System.out.print(date + " [INFO] ");
+			} else {
+				System.out.print("|");
+			}
+		}
 	}
 }
