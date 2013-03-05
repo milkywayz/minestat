@@ -91,12 +91,12 @@ public class StatThread extends Thread {
 		stats.add(st);
 		return maxEntry.getKey();
 	}
-	
+
 	public String favoriteLicense() throws JSONException {
 		Map<String, Integer> books = new HashMap<String, Integer>();
 		for (Book b : localLibrary) {
 			String license = b.getLicense();
-			if(books.containsKey(license)) {
+			if (books.containsKey(license)) {
 				int c = books.get(license);
 				books.remove(license);
 				books.put(license, c++);
@@ -116,7 +116,7 @@ public class StatThread extends Thread {
 		return maxEntry.getKey();
 	}
 
-	public String favoriteWord() throws JSONException {
+	public String favoriteWord() {
 		String giant = "";
 		for (Book b : localLibrary) {
 			giant = giant + b.getContent();
@@ -139,24 +139,16 @@ public class StatThread extends Thread {
 		stats.add(st);
 		return mfw;
 	}
-	
 
-	public void writeJson(List<Stat> sts) throws Exception {
+	public static void writeJson(List<Stat> sts) throws Exception {
 		String json = "{";
 		for (Stat t : sts) {
-			json = json + "\"" + t.getTitle() + "\":" + "\"" + t.getValue() + "\",";
+			json = json + "\"" + t.getTitle() + "\":" + "\"" + t.getValue()
+					+ "\",";
 		}
-		String j = json.substring(0, json.length()-1);
-		j = j + "}".replace("\\s", "");
+		String j = json.substring(0, json.length() - 1);
+		j = j + "}";
 		MWStats.log(j);
-		sendJSON(new JSONObject(j));
-	}
-
-	public void sendJSON(JSONObject obj) throws JSONException {
-		try {
-			Upload.postJSON(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Upload.postJson(new JSONObject(j));
 	}
 }
