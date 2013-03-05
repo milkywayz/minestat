@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import static net.minewriter.Color.*;
 
 public class MWStats {
 
@@ -19,7 +20,7 @@ public class MWStats {
 
 	public static void main(String[] args) {
 		MWStats mw = new MWStats();
-		log("Starting new stats generator");
+		log(BLUE + "Starting new stats generator");
 		int i;
 		try {
 			i = Integer.parseInt(args[0]);
@@ -27,14 +28,14 @@ public class MWStats {
 			i = 10;
 		}
 		update = i;
-		log("Will calculate stats every " + i + " minutes");
+		log(BLUE + "Will calculate stats every " + i + " minutes");
 		new DiffThread(mw).start();
 		new ConsoleThread().start();
 	}
 
 	public static void log(String log) {
 		String date = sdf.format(new Date());
-		System.out.println(date + " [INFO] " + log);
+		System.out.println(date + " [INFO] " + log + RESET);
 	}
 }
 
@@ -60,13 +61,13 @@ class ConsoleThread extends Thread {
 	private void processCommand(String cmd) {
 		switch (cmd) {
 		case "help":
-			MWStats.log("Commands: help, exit");
+			MWStats.log(BLUE + "Commands: help, exit");
 			break;
 		case "exit":
 			System.exit(0);
 			break;
 		default:
-			MWStats.log("Command '" + cmd + "' is not recognized, type 'help'");
+			MWStats.log(RED + "Command '" + cmd + "' is not recognized, type 'help'");
 			break;
 		}
 	}
@@ -111,11 +112,11 @@ class DiffThread extends Thread {
 		}
 		int dif = total - i;
 		if (dif < 0) {
-			MWStats.log("Caught invalid difference, less than 0! -> " + dif);
+			MWStats.log(RED + "Caught invalid difference, less than 0! -> " + dif);
 		} else if (dif == 0) {
-			MWStats.log("Stats appear to be up to date");
+			MWStats.log(GREEN + "Stats appear to be up to date");
 		} else {
-			System.out.print("Processing " + dif + " books into our cache");
+			MWStats.log(MAGENTA + "Processing " + dif + " books into our cache");
 			new UpdateThread(mw, total, mw.library.size()).start();
 		}
 		try {
