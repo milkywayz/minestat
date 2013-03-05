@@ -12,21 +12,20 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-public class Upload extends Thread {
+public class Upload {
 
-	/**
-	 * Uses apaches httpclient
-	 * @param jso
-	 * @throws Exception
-	 */
 	@SuppressWarnings("deprecation")
-	public static void postJSON(JSONObject jso) throws Exception{
-		HttpClient httpclient= new DefaultHttpClient();
-	    HttpPost httppost= new HttpPost("http://minewriter.net/stat.php");
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
-	    nameValuePairs.add(new BasicNameValuePair("json", jso.toString()));
-	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-	    httpclient.execute(httppost);  
-		httppost.setEntity(new StringEntity(jso.toString(),"application/json","UTF-8"));
+	public static void postJson(JSONObject jso) {
+		try {
+			HttpClient httpclient = new DefaultHttpClient();
+			HttpPost post = new HttpPost("http://minewriter.net/stat.php");
+			List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+			nameValuePairs.add(new BasicNameValuePair("json", jso.toString()));
+			post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+			httpclient.execute(post);
+			post.setEntity(new StringEntity(jso.toString(),"application/json", "UTF-8"));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 }
