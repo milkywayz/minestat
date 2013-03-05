@@ -46,7 +46,7 @@ public class StatThread extends Thread {
 		localLibrary.clear();
 	}
 
-	public int doCharacterCount() throws JSONException {
+	public int doCharacterCount() {
 		int chars = 0;
 		for (Book b : localLibrary) {
 			int chart = b.getContent().length();
@@ -148,7 +148,7 @@ public class StatThread extends Thread {
 		}
 		String j = json.substring(0, json.length() - 1);
 		j = j + "}";
-		MWStats.log(j);
+		MWStats.log(Color.BLUE + j);
 		Upload.postJson(new JSONObject(j));
 	}
 }
