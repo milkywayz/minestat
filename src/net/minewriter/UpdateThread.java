@@ -64,13 +64,8 @@ public class UpdateThread extends Thread {
 		if (percent % 5 == 0) {
 			if (p != percent) {
 				p = percent;
-				System.out.println();
-				MWStats.log("Fetching at " + percent + "%");
-				String date = MWStats.sdf.format(new Date());
-				System.out.print(date + " [INFO] ");
-			} else {
-				System.out.print("|");
-			}
+				MWStats.log(Color.CYAN + "Fetching at " + percent + "%");				
+			} 
 		}
 	}
 }
