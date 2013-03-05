@@ -11,14 +11,15 @@ public class Book {
 	private String license;
 
 	public Book(JSONObject obj) {
-		this.obj = obj;
-		this.inv = false;
+		this.obj = obj;		
 		String cont = null;
 		try {
 			cont = obj.getString("Content");
 			license = obj.getString("License");
-		} catch(Exception ex) {			
-		} finally {
+			this.inv = false;
+		} catch(Exception ex) {		
+			this.inv = true;
+		} finally {		
 			content = cont;
 		}
 	}
